@@ -1,0 +1,9 @@
+name: Replicants
+type: module
+description: Interfact that allows the user to replicate content using existing nodes as templates.
+core: 8.x
+package: Custom
+dependencies:
+  - replicate
+  - node
+  - block
