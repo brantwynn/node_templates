@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.draft
+    - workbench_moderation.moderation_state.replicant
+id: replicant_draft
+label: 'Move Replicant to Draft'
+stateFrom: replicant
+stateTo: draft
+weight: -10
+
