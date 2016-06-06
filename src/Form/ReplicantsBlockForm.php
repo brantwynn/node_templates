@@ -111,19 +111,18 @@ class ReplicantsBlockForm extends FormBase {
     unset($node);
     // Create the replicant node.
     $replicator = new Replicator($this->entityTypeManager, $this->eventDispatcher);
-    if ($replicant = $replicator->replicateByEntityId('node', $nid)) {
-      // Concatenate url for the replicant node redirect.
-      $url = '/node/' . $replicant->id();
+    if ($replicant = $replicator->cloneByEntityId('node', $nid)) {
       // Set title for replicant node.
       $title = $form_state->getValue('title');
       $replicant->setTitle($title);
       // Set moderation state for replicant node.
       if ($form_state->getValue('draft')) {
-        // Create a new draft and append to our redirect.
+        // Set moderation state to draft.
         $replicant->moderation_state->target_id = 'draft';
-        $url = $url . '/latest';
       }
       $replicant->save();
+      // Concatenate url for the replicant node redirect.
+      $url = '/node/' . $replicant->id();
       // Send a friendly message.
       $message = $this->t('"@nodeTitle" [@nodeId] has been copied as "@replicantTitle" [@replicantId].', [
         '@nodeTitle' => $node_title,
