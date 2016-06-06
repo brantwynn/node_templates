@@ -87,10 +87,8 @@ class ReplicantsBlockForm extends FormBase {
       $node_type = NodeType::load($node->getType());
       if ($node_type->getThirdPartySetting('workbench_moderation', 'enabled')) {
         $form['replicant_draft'] = [
-          '#title' => 'Replicant Moderation State',
-          '#type' => 'checkbox',
-          '#default_value' => 1,
-          '#disabled' => 1
+          '#type' => 'hidden',
+          '#value' => 1
         ];
       }
       $form['save'] = [
@@ -116,7 +114,7 @@ class ReplicantsBlockForm extends FormBase {
       // Set title for replicant node.
       $title = $form_state->getValue('title');
       $replicant->setTitle($title);
-      // Set moderation state for replicant node.
+      // Set moderation state for replicant node where available.
       if ($form_state->getValue('replicant_draft')) {
         // Set moderation state to replicant (draft).
         $replicant->moderation_state->target_id = 'replicant';
