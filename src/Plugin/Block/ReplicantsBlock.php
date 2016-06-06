@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Block(
  *  id = "replicants_block",
- *  admin_label = @Translation("Replicants"),
+ *  admin_label = @Translation("Create Replicant"),
  *  context = {
  *    "node" = @ContextDefinition("entity:node", label = @Translation("Node"))
  *  },
