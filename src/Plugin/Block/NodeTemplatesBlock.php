@@ -52,7 +52,7 @@ class NodeTemplatesBlock extends BlockBase implements ContainerFactoryPluginInte
   public function build() {
     $block = [];
     $node = $this->getContextValue('node');
-    $block = [$this->formBuilder->getForm('\Drupal\templates\Form\NodeTemplatesBlockForm', $node)];
+    $block = [$this->formBuilder->getForm('\Drupal\node_templates\Form\NodeTemplatesBlockForm', $node)];
     return $block;
   }
 
