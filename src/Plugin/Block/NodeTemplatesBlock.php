@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\templates\Plugin\Block;
+namespace Drupal\node_templates\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormBuilder;
@@ -8,10 +8,10 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a 'TemplatesBlock' block.
+ * Provides a 'NodeTemplatesBlock' block.
  *
  * @Block(
- *  id = "templates_block",
+ *  id = "node_templates_block",
  *  admin_label = @Translation("Templates"),
  *  context = {
  *    "node" = @ContextDefinition("entity:node", label = @Translation("Node"))
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  *
  */
-class TemplatesBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class NodeTemplatesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The form builder.
@@ -52,7 +52,7 @@ class TemplatesBlock extends BlockBase implements ContainerFactoryPluginInterfac
   public function build() {
     $block = [];
     $node = $this->getContextValue('node');
-    $block = [$this->formBuilder->getForm('\Drupal\templates\Form\TemplatesBlockForm', $node)];
+    $block = [$this->formBuilder->getForm('\Drupal\templates\Form\NodeTemplatesBlockForm', $node)];
     return $block;
   }
 

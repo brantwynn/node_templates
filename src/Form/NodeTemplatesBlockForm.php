@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\templates\Form;
+namespace Drupal\node_templates\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,11 +15,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class TemplatesBlockForm.
+ * Class NodeTemplatesBlockForm.
  *
- * @package Drupal\templates\Form
+ * @package Drupal\node_templates\Form
  */
-class TemplatesBlockForm extends FormBase {
+class NodeTemplatesBlockForm extends FormBase {
 
   /**
    * The entity type manager.
@@ -64,7 +64,7 @@ class TemplatesBlockForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'templates_form';
+    return 'node_templates_form';
   }
 
   /**
