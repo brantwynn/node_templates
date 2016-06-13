@@ -1,8 +1,8 @@
 langcode: en
 status: true
 dependencies: {  }
-id: replicant
-label: Replicant
+id: template
+label: Template
 published: false
 default_revision: false
 

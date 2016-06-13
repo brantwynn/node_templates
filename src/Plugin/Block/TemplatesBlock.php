@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\replicants\Plugin\Block;
+namespace Drupal\templates\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormBuilder;
@@ -8,11 +8,11 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a 'ReplicantsBlock' block.
+ * Provides a 'TemplatesBlock' block.
  *
  * @Block(
- *  id = "replicants_block",
- *  admin_label = @Translation("Create Replicant"),
+ *  id = "templates_block",
+ *  admin_label = @Translation("Templates"),
  *  context = {
  *    "node" = @ContextDefinition("entity:node", label = @Translation("Node"))
  *  },
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  *
  */
-class ReplicantsBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class TemplatesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The form builder.
@@ -52,7 +52,7 @@ class ReplicantsBlock extends BlockBase implements ContainerFactoryPluginInterfa
   public function build() {
     $block = [];
     $node = $this->getContextValue('node');
-    $block = [$this->formBuilder->getForm('\Drupal\replicants\Form\ReplicantsBlockForm', $node)];
+    $block = [$this->formBuilder->getForm('\Drupal\templates\Form\TemplatesBlockForm', $node)];
     return $block;
   }
 

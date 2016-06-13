@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\replicants\Form;
+namespace Drupal\templates\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -15,11 +15,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class ReplicateNodeBlockForm.
+ * Class TemplatesBlockForm.
  *
- * @package Drupal\replicate_node_block\Form
+ * @package Drupal\templates\Form
  */
-class ReplicantsBlockForm extends FormBase {
+class TemplatesBlockForm extends FormBase {
 
   /**
    * The entity type manager.
@@ -64,7 +64,7 @@ class ReplicantsBlockForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'replicants_form';
+    return 'templates_form';
   }
 
   /**
@@ -86,7 +86,7 @@ class ReplicantsBlockForm extends FormBase {
       ];
       $node_type = NodeType::load($node->getType());
       if ($node_type->getThirdPartySetting('workbench_moderation', 'enabled')) {
-        $form['replicant_draft'] = [
+        $form['template_draft'] = [
           '#type' => 'hidden',
           '#value' => 1
         ];
@@ -108,29 +108,29 @@ class ReplicantsBlockForm extends FormBase {
     $node = Node::load($nid);
     $node_title = $node->getTitle();
     unset($node);
-    // Create the replicant node.
+    // Create the template node.
     $replicator = new Replicator($this->entityTypeManager, $this->eventDispatcher);
-    if ($replicant = $replicator->cloneByEntityId('node', $nid)) {
-      // Set title for replicant node.
+    if ($template = $replicator->cloneByEntityId('node', $nid)) {
+      // Set title for template node.
       $title = $form_state->getValue('title');
-      $replicant->setTitle($title);
-      // Set moderation state for replicant node where available.
-      if ($form_state->getValue('replicant_draft')) {
-        // Set moderation state to replicant (draft).
-        $replicant->moderation_state->target_id = 'replicant';
+      $template->setTitle($title);
+      // Set moderation state for template node where available.
+      if ($form_state->getValue('template_draft')) {
+        // Set moderation state to template (draft).
+        $template->moderation_state->target_id = 'template';
       }
-      $replicant->save();
-      // Concatenate url for the replicant node redirect.
-      $url = '/node/' . $replicant->id();
+      $template->save();
+      // Concatenate url for the template node redirect.
+      $url = '/node/' . $template->id();
       // Send a friendly message.
-      $message = $this->t('"@nodeTitle" [@nodeId] has been copied as "@replicantTitle" [@replicantId].', [
+      $message = $this->t('"@nodeTitle" [@nodeId] has been copied as "@templateTitle" [@templateId].', [
         '@nodeTitle' => $node_title,
         '@nodeId' => $nid,
-        '@replicantTitle' => $replicant->getTitle(),
-        '@replicantId' => $replicant->id(),
+        '@templateTitle' => $template->getTitle(),
+        '@templateId' => $template->id(),
       ]);
       drupal_set_message($message, 'status');
-      // Redirect to the replicant node.
+      // Redirect to the template node.
       $redirectUrl = Url::fromUserInput($url);
       $form_state->setRedirectUrl($redirectUrl);
     }

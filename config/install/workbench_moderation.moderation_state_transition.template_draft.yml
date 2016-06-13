@@ -3,10 +3,10 @@ status: true
 dependencies:
   config:
     - workbench_moderation.moderation_state.draft
-    - workbench_moderation.moderation_state.replicant
-id: replicant_draft
-label: 'Move Replicant to Draft'
-stateFrom: replicant
+    - workbench_moderation.moderation_state.template
+id: template_draft
+label: 'Move Copy to Draft'
+stateFrom: template
 stateTo: draft
 weight: -10
 
