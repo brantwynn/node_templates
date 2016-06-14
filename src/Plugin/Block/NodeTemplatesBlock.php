@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Block(
  *  id = "node_templates_block",
- *  admin_label = @Translation("Templates"),
+ *  admin_label = @Translation("New Template"),
  *  context = {
  *    "node" = @ContextDefinition("entity:node", label = @Translation("Node"))
  *  },

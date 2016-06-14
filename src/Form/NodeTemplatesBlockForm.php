@@ -91,9 +91,15 @@ class NodeTemplatesBlockForm extends FormBase {
           '#value' => 1
         ];
       }
+      $comments = $node->comment->status;
+      $form['comment_toggle'] = [
+        '#type' => 'checkbox',
+        '#default_value' => ($comments == 2 ? 1 : 0),
+        '#title' => 'Enable Comments',
+      ];
       $form['save'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Save as Copy'),
+        '#value' => $this->t('Create Template'),
       ];
     }
     return $form;
@@ -119,6 +125,8 @@ class NodeTemplatesBlockForm extends FormBase {
         // Set moderation state to template (draft).
         $template->moderation_state->target_id = 'template';
       }
+      // Comment toggle settings.
+      $template->set('comment', ($form_state->getValue('comment_toggle') ? 2 : 1));
       $template->save();
       // Concatenate url for the template node redirect.
       $url = '/node/' . $template->id();

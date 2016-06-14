@@ -5,7 +5,7 @@ dependencies:
     - workbench_moderation.moderation_state.draft
     - workbench_moderation.moderation_state.template
 id: template_draft
-label: 'Move Copy to Draft'
+label: 'Move Template into Draft'
 stateFrom: template
 stateTo: draft
 weight: -10
