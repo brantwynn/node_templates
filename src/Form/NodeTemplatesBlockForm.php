@@ -77,12 +77,10 @@ class NodeTemplatesBlockForm extends FormBase {
         '#type' => 'hidden',
         '#value' => $nid
       ];
-      if (!$node->isDefaultTranslation()) {
-        $form['langcode'] = [
-          '#type' => 'hidden',
-          '#value' => $node->language()->getId(),
-        ];
-      }
+      $form['langcode'] = [
+        '#type' => 'hidden',
+        '#value' => $node->language()->getId(),
+      ];
       $form['title'] = [
         '#type' => 'textfield',
         '#default_value' => $node->getTitle(),
@@ -95,10 +93,10 @@ class NodeTemplatesBlockForm extends FormBase {
           '#value' => 1
         ];
       }
-      $comments = $node->comment->status;
+      $comment_status = $node->comment->status;
       $form['comment_toggle'] = [
         '#type' => 'checkbox',
-        '#default_value' => ($comments == 2 ? 1 : 0),
+        '#default_value' => ($comment_status == 2 ? 1 : 0),
         '#title' => 'Enable Comments',
       ];
       $form['save'] = [
@@ -113,39 +111,24 @@ class NodeTemplatesBlockForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Load the original node.
-    $nid = $form_state->getValue('node_id');
-    $node = Node::load($nid);
-    $node_title = $node->getTitle();
-    if ($langcode = $form_state->getValue('langcode')) {
-      $node_title = $node->getTranslation($langcode)->title->value;
-    }
-    unset($node);
-    // Get form values for the new template.
+    // Return values to be used for the new template node.
+    $langcode = $form_state->getValue('langcode');
     $title = $form_state->getValue('title');
     $comments = ($form_state->getValue('comment_toggle') ? 2 : 1);
-    if ($form_state->getValue('template_draft')) {
-      $moderation = 'template';
-    }
+    // Load the original node to extract original title.
+    $nid = $form_state->getValue('node_id');
+    $node = Node::load($nid);
+    $node_title = $node->getTranslation($langcode)->title->value;
+    // Unset node to alleviate issues with the Replicate API.
+    unset($node);
     // Create the template node using replicate.
     $replicator = new Replicator($this->entityTypeManager, $this->eventDispatcher);
     if ($template = $replicator->cloneByEntityId('node', $nid)) {
       // Set new values to template.
-      if (isset($langcode)) {
-        // Translation use case.
-        $template->getTranslation($langcode)->title->value = $title;
-        $template->getTranslation($langcode)->set('comment', $comments);
-        if (isset($moderation)) {
-          $template->getTranslation($langcode)->moderation_state->target_id = $moderation;
-        }
-      }
-      else {
-        // Default language use case.
-        $template->setTitle($title);
-        $template->set('comment', $comments);
-        if (isset($moderation)) {
-          $template->moderation_state->target_id = $moderation;
-        }
+      $template->getTranslation($langcode)->title->value = $title;
+      $template->getTranslation($langcode)->set('comment', $comments);
+      if ($form_state->getValue('template_draft')) {
+        $template->getTranslation($langcode)->moderation_state->target_id = 'template';
       }
       // Save the new node template values.
       $template->save();
@@ -153,7 +136,7 @@ class NodeTemplatesBlockForm extends FormBase {
       $message = $this->t('"@nodeTitle" [@nodeId] has been copied as "@templateTitle" [@templateId].', [
         '@nodeTitle' => $node_title,
         '@nodeId' => $nid,
-        '@templateTitle' => $template->getTitle(),
+        '@templateTitle' => $template->getTranslation($langcode)->getTitle(),
         '@templateId' => $template->id(),
       ]);
       drupal_set_message($message, 'status');
