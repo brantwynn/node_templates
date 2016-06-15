@@ -1,0 +1,26 @@
+# Spanish translation of Node Templates
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2016-06-15 20:47+0000\n"
+"PO-Revision-Date: 2016-06-15 20:47+0000\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "New Template"
+msgstr "Nueva Plantilla"
+
+msgid "Enable Comments"
+msgstr "Habilitar Comentarios"
+
+msgid "Create Template"
+msgstr "Crear Plantilla"
+
+msgid "'@nodeTitle' [@nodeId] has been copied as '@templateTitle' [@templateId]."
+msgstr "'@nodeTitle' [@nodeId] ha sido copiado como '@templateTitle' [@templateId]."
+

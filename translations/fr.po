@@ -1,0 +1,25 @@
+# French translation of Node Templates
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2016-06-15 20:47+0000\n"
+"PO-Revision-Date: 2016-06-15 20:47+0000\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "New Template"
+msgstr "Nouveau Modèle"
+
+msgid "Enable Comments"
+msgstr "Activer Coments"
+
+msgid "Create Template"
+msgstr "Créer un Modèle"
+
+msgid "'@nodeTitle' [@nodeId] has been copied as '@templateTitle' [@templateId]."
+msgstr "'@nodeTitle' [@nodeId] a été copié comme '@templateTitle' [@templateId]."
