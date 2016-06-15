@@ -130,7 +130,6 @@ class NodeTemplatesBlockForm extends FormBase {
     // Create the template node using replicate.
     $replicator = new Replicator($this->entityTypeManager, $this->eventDispatcher);
     if ($template = $replicator->cloneByEntityId('node', $nid)) {
-      $test = $template;
       // Set new values to template.
       if (isset($langcode)) {
         // Translation use case.
