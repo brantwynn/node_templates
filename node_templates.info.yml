@@ -2,9 +2,10 @@ name: Node Templates
 type: module
 description: Interfact that allows the user to replicate content using existing nodes as templates.
 core: 8.x
-package: Custom
+package: Templates
 dependencies:
-  - replicate
-  - node
   - block
+  - node
+  - replicate
+  - views
   - workbench_moderation
