@@ -123,7 +123,7 @@ class NodeTemplatesBlockForm extends FormBase {
     unset($node);
     // Get form values for the new template.
     $title = $form_state->getValue('title');
-    $comments = $form_state->getValue('comment_toggle');
+    $comments = ($form_state->getValue('comment_toggle') ? 2 : 1);
     if ($form_state->getValue('template_draft')) {
       $moderation = 'template';
     }
@@ -134,7 +134,7 @@ class NodeTemplatesBlockForm extends FormBase {
       if (isset($langcode)) {
         // Translation use case.
         $template->getTranslation($langcode)->title->value = $title;
-        $template->getTranslation($langcode)->set('comment', ($comments ? 2 : 1));
+        $template->getTranslation($langcode)->set('comment', $comments);
         if (isset($moderation)) {
           $template->getTranslation($langcode)->moderation_state->target_id = $moderation;
         }
@@ -142,7 +142,7 @@ class NodeTemplatesBlockForm extends FormBase {
       else {
         // Default language use case.
         $template->setTitle($title);
-        $template->set('comment', ($comments ? 2 : 1));
+        $template->set('comment', $comments);
         if (isset($moderation)) {
           $template->moderation_state->target_id = $moderation;
         }
