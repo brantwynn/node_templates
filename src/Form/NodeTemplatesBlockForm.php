@@ -84,7 +84,7 @@ class NodeTemplatesBlockForm extends FormBase {
       $form['title'] = [
         '#type' => 'textfield',
         '#default_value' => $node->getTitle(),
-        '#title' => 'Title',
+        '#title' => $this->t('Title'),
       ];
       $node_type = NodeType::load($node->getType());
       $form['moderation'] = [
@@ -94,8 +94,8 @@ class NodeTemplatesBlockForm extends FormBase {
       $comment_status = $node->comment->status;
       $form['comment_toggle'] = [
         '#type' => 'checkbox',
-        '#default_value' => ($comment_status == 2 ? 1 : 0),
-        '#title' => 'Enable Comments',
+        '#default_value' => ($comment_status == 2),
+        '#title' => $this->t('Enable Comments'),
       ];
       $form['save'] = [
         '#type' => 'submit',
@@ -139,7 +139,7 @@ class NodeTemplatesBlockForm extends FormBase {
       // Save the new template.
       $template->save();
       // Send a friendly message.
-      $message = $this->t('"@nodeTitle" [@nodeId] has been copied as "@templateTitle" [@templateId].', [
+      $message = $this->t("'@nodeTitle' [@nodeId] has been copied as '@templateTitle' [@templateId].", [
         '@nodeTitle' => $node_title,
         '@nodeId' => $node_id,
         '@templateTitle' => $template->getTranslation($langcode)->getTitle(),
