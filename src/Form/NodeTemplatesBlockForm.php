@@ -112,25 +112,31 @@ class NodeTemplatesBlockForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Return values to be used for the new template node.
-    $langcode = $form_state->getValue('langcode');
     $title = $form_state->getValue('title');
+    $langcode = $form_state->getValue('langcode');
     $comments = ($form_state->getValue('comment_toggle') ? 2 : 1);
-    // Load the original node to extract original title.
+    // Load the original node to extract a title.
     $nid = $form_state->getValue('node_id');
     $node = Node::load($nid);
     $node_title = $node->getTranslation($langcode)->title->value;
-    // Unset node to alleviate issues with the Replicate API.
-    unset($node);
-    // Create the template node using replicate.
+    // Create the template using replicate.
     $replicator = new Replicator($this->entityTypeManager, $this->eventDispatcher);
     if ($template = $replicator->cloneByEntityId('node', $nid)) {
-      // Set new values to template.
+      // Set new title for the new template.
       $template->getTranslation($langcode)->title->value = $title;
-      $template->getTranslation($langcode)->set('comment', $comments);
-      if ($form_state->getValue('template_draft')) {
-        $template->getTranslation($langcode)->moderation_state->target_id = 'template';
+      // Set additional values for the new template and its translations.
+      $languages = $template->getTranslationLanguages();
+      foreach ($languages as $id => $language) {
+        // Comment toggle should persist across translations.
+        $template->getTranslation($id)->set('comment', $comments);
+        // Moderation state for all translations is 'template'.
+        if ($form_state->getValue('template_draft')) {
+          $template->getTranslation($id)->moderation_state->target_id = 'template';
+        }
+        // Ensure all translations are unpublished.
+        $template->getTranslation($id)->status->value = 0;
       }
-      // Save the new node template values.
+      // Save the new node template.
       $template->save();
       // Send a friendly message.
       $message = $this->t('"@nodeTitle" [@nodeId] has been copied as "@templateTitle" [@templateId].', [
