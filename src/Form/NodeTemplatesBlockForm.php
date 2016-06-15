@@ -87,12 +87,10 @@ class NodeTemplatesBlockForm extends FormBase {
         '#title' => 'Title',
       ];
       $node_type = NodeType::load($node->getType());
-      if ($node_type->getThirdPartySetting('workbench_moderation', 'enabled')) {
-        $form['template_draft'] = [
-          '#type' => 'hidden',
-          '#value' => 1
-        ];
-      }
+      $form['moderation'] = [
+        '#type' => 'hidden',
+        '#value' => $node_type->getThirdPartySetting('workbench_moderation', 'enabled')
+      ];
       $comment_status = $node->comment->status;
       $form['comment_toggle'] = [
         '#type' => 'checkbox',
@@ -111,44 +109,46 @@ class NodeTemplatesBlockForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Return values to be used for the new template node.
-    $title = $form_state->getValue('title');
+    // Return values to be used for the new template.
+    $node_id = $form_state->getValue('node_id');
     $langcode = $form_state->getValue('langcode');
+    $title = $form_state->getValue('title');
+    $moderation = $form_state->getValue('moderation');
     $comments = ($form_state->getValue('comment_toggle') ? 2 : 1);
-    // Load the original node to extract a title.
-    $nid = $form_state->getValue('node_id');
-    $node = Node::load($nid);
+    // Load the target node to extract its title.
+    $node = Node::load($node_id);
     $node_title = $node->getTranslation($langcode)->title->value;
     // Create the template using replicate.
     $replicator = new Replicator($this->entityTypeManager, $this->eventDispatcher);
-    if ($template = $replicator->cloneByEntityId('node', $nid)) {
-      // Set new title for the new template.
+    if ($template = $replicator->cloneByEntityId('node', $node_id)) {
+      // Set the title for our new template.
       $template->getTranslation($langcode)->title->value = $title;
-      // Set additional values for the new template and its translations.
+      // Set additional values for the template and its translations.
       $languages = $template->getTranslationLanguages();
       foreach ($languages as $id => $language) {
         // Comment toggle should persist across translations.
         $template->getTranslation($id)->set('comment', $comments);
+        $test = $moderation;
         // Moderation state for all translations is 'template'.
-        if ($form_state->getValue('template_draft')) {
+        if ($moderation) {
           $template->getTranslation($id)->moderation_state->target_id = 'template';
         }
-        // Ensure all translations are unpublished.
+        // Ensure all translations are initially unpublished.
         $template->getTranslation($id)->status->value = 0;
       }
-      // Save the new node template.
+      // Save the new template.
       $template->save();
       // Send a friendly message.
       $message = $this->t('"@nodeTitle" [@nodeId] has been copied as "@templateTitle" [@templateId].', [
         '@nodeTitle' => $node_title,
-        '@nodeId' => $nid,
+        '@nodeId' => $node_id,
         '@templateTitle' => $template->getTranslation($langcode)->getTitle(),
         '@templateId' => $template->id(),
       ]);
       drupal_set_message($message, 'status');
-      // Concatenate url for the template node redirect.
+      // Concatenate url for the template redirect.
       $url = '/node/' . $template->id();
-      // Redirect to the template node.
+      // Redirect to the template.
       $redirectUrl = Url::fromUserInput($url);
       $form_state->setRedirectUrl($redirectUrl);
     }
