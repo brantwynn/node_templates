@@ -128,7 +128,6 @@ class NodeTemplatesBlockForm extends FormBase {
       foreach ($languages as $id => $language) {
         // Comment toggle should persist across translations.
         $template->getTranslation($id)->set('comment', $comments);
-        $test = $moderation;
         // Moderation state for all translations is 'template'.
         if ($moderation) {
           $template->getTranslation($id)->moderation_state->target_id = 'template';
