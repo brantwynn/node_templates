@@ -7,8 +7,8 @@ dependencies:
     - node
     - user
     - views_infinite_scroll
-id: node_templates
-label: 'Node Templates'
+id: template_nodes
+label: 'Template Nodes'
 module: views
 description: ''
 tag: ''
